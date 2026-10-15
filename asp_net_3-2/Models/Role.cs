@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace asp_net_3_2.Models;
 
-public partial class Role
+public partial class Role : IEntity
 {
     public int Id { get; set; }
 

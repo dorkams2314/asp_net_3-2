@@ -14,6 +14,7 @@ GO
 USE AutoFixDB;
 GO
 
+DROP TABLE IF EXISTS Reservations;
 DROP TABLE IF EXISTS OrderItems;
 DROP TABLE IF EXISTS Orders;
 DROP TABLE IF EXISTS CartItems;
@@ -49,7 +50,9 @@ CREATE TABLE Products (
     Description NVARCHAR(500) NOT NULL,
     ImagePath NVARCHAR(300) NOT NULL,
     Price DECIMAL(10, 2) NOT NULL,
+    StockQuantity INT NOT NULL CONSTRAINT DF_Products_StockQuantity DEFAULT 0,
     CategoryId INT NOT NULL,
+    CONSTRAINT CK_Products_StockQuantity CHECK (StockQuantity >= 0),
     FOREIGN KEY (CategoryId) REFERENCES Categories(Id)
 );
 
@@ -84,6 +87,25 @@ CREATE TABLE OrderItems (
     FOREIGN KEY (OrderId) REFERENCES Orders(Id),
     FOREIGN KEY (ProductId) REFERENCES Products(Id)
 );
+
+CREATE TABLE dbo.Reservations (
+    Id INT NOT NULL IDENTITY(1, 1) CONSTRAINT PK_Reservations PRIMARY KEY,
+    OrderId INT NOT NULL,
+    ProductId INT NOT NULL,
+    UserId INT NOT NULL,
+    Quantity INT NOT NULL,
+    CreatedAt DATETIME2 NOT NULL,
+    CancelledAt DATETIME2 NULL,
+    CONSTRAINT FK_Reservations_Orders FOREIGN KEY (OrderId) REFERENCES dbo.Orders(Id),
+    CONSTRAINT FK_Reservations_Products FOREIGN KEY (ProductId) REFERENCES dbo.Products(Id),
+    CONSTRAINT FK_Reservations_Users FOREIGN KEY (UserId) REFERENCES dbo.Users(Id),
+    CONSTRAINT CK_Reservations_Quantity CHECK (Quantity > 0),
+    CONSTRAINT CK_Reservations_Dates CHECK (CancelledAt IS NULL OR CancelledAt >= CreatedAt)
+);
+
+CREATE INDEX IX_Reservations_OrderId ON dbo.Reservations(OrderId);
+CREATE INDEX IX_Reservations_ProductId ON dbo.Reservations(ProductId);
+CREATE INDEX IX_Reservations_UserId ON dbo.Reservations(UserId);
 
 INSERT INTO Roles (Name)
 VALUES

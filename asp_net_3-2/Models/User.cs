@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace asp_net_3_2.Models;
 
-public partial class User
+public partial class User : IEntity
 {
     public int Id { get; set; }
 

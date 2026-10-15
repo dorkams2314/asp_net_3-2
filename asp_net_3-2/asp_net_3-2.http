@@ -1,6 +1,81 @@
-@asp_net_3_2_HostAddress = http://localhost:5152
+@host = http://localhost:5152
+@orderId = 1
+@productId = 1
+@reservationId = 1
 
-GET {{asp_net_3_2_HostAddress}}/weatherforecast/
-Accept: application/json
+### Paginated orders with nested customer and items; inspect X-Total-Count
+GET {{host}}/api/orders?page=1&pageSize=10
 
-###
+### Related entities
+GET {{host}}/api/products?page=1&pageSize=10
+
+### Create an order for an existing customer
+POST {{host}}/api/orders
+Content-Type: application/json
+
+{
+  "userId": 2
+}
+
+### Set available stock to its actual value
+PATCH {{host}}/api/products/{{productId}}
+Content-Type: application/json
+
+{
+  "stockQuantity": 10
+}
+
+### Reserve stock; use the returned reservation ID below
+POST {{host}}/api/reservations
+Content-Type: application/json
+
+{
+  "orderId": {{orderId}},
+  "productId": {{productId}},
+  "quantity": 2
+}
+
+### Read the reservation and related records
+GET {{host}}/api/reservations/{{reservationId}}
+
+### Full update of writable reservation fields; stock changes by the difference
+PUT {{host}}/api/reservations/{{reservationId}}
+Content-Type: application/json
+
+{
+  "quantity": 3
+}
+
+### Partial update
+PATCH {{host}}/api/reservations/{{reservationId}}
+Content-Type: application/json
+
+{
+  "quantity": 1
+}
+
+### Insufficient stock returns 409 with ProblemDetails
+POST {{host}}/api/reservations
+Content-Type: application/json
+
+{
+  "orderId": {{orderId}},
+  "productId": {{productId}},
+  "quantity": 2147483647
+}
+
+### Cancel and restore stock; repeating this request returns 404
+POST {{host}}/api/reservations/{{reservationId}}/cancel
+
+### Delete the cancelled event
+DELETE {{host}}/api/reservations/{{reservationId}}
+
+### Invalid quantities return 400
+POST {{host}}/api/reservations
+Content-Type: application/json
+
+{
+  "orderId": {{orderId}},
+  "productId": {{productId}},
+  "quantity": 0
+}

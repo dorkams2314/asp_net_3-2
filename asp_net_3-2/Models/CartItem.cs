@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace asp_net_3_2.Models;
 
-public partial class CartItem
+public partial class CartItem : IEntity
 {
     public int Id { get; set; }
 
