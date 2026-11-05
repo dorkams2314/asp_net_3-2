@@ -5,11 +5,11 @@ namespace asp_net_3_2.DTOs.Reservations;
 public sealed class CreateReservationDto
 {
     [Range(1, int.MaxValue)]
-    public int OrderId { get; set; }
+    public required int OrderId { get; set; }
 
     [Range(1, int.MaxValue)]
-    public int ProductId { get; set; }
+    public required int ProductId { get; set; }
 
     [Range(1, int.MaxValue)]
-    public int Quantity { get; set; }
+    public required int Quantity { get; set; }
 }

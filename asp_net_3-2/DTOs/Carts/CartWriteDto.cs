@@ -5,5 +5,5 @@ namespace asp_net_3_2.DTOs.Carts;
 public sealed class CartWriteDto
 {
     [Range(1, int.MaxValue)]
-    public int UserId { get; set; }
+    public required int UserId { get; set; }
 }

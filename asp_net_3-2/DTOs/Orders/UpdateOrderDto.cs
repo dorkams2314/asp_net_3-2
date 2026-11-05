@@ -5,5 +5,5 @@ namespace asp_net_3_2.DTOs.Orders;
 public sealed class UpdateOrderDto
 {
     [Range(1, int.MaxValue)]
-    public int UserId { get; set; }
+    public required int UserId { get; set; }
 }

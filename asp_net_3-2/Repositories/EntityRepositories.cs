@@ -28,6 +28,12 @@ public sealed class CartRepository(AutoFixDbContext context) : Repository<Cart>(
 {
     protected override IQueryable<Cart> ReadQuery => Context.Carts
         .Include(cart => cart.User).Include(cart => cart.CartItems).ThenInclude(item => item.Product);
+
+    public override void Remove(Cart entity)
+    {
+        Context.CartItems.RemoveRange(Context.CartItems.Where(item => item.CartId == entity.Id));
+        base.Remove(entity);
+    }
 }
 
 public sealed class CartItemRepository(AutoFixDbContext context) : Repository<CartItem>(context)
