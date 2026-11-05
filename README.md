@@ -4,7 +4,15 @@ The main branch combines the CRUD and DTO fixes from assignment 9 with the layer
 
 ## Run
 
-Use the existing `AutoFixDB` database on `.\SQLEXPRESS`. Apply `SQLQueryAutoFixDB.sql` to add stock quantities and reservations. The script preserves existing rows and can be executed repeatedly. Run `dotnet run --project asp_net_3-2` and open `/swagger` at the development URL printed by the application.
+Use SQL Server `.\SQLEXPRESS` and the `AutoFixDB` database.
+
+- For a new installation, run `SQLQueryAutoFixDB.sql` to create the original eight tables and their initial data, then run `SQLQueryAutoFixDB.Update.sql` to add stock quantities and reservations for assignment 10.
+- If the original database already exists, run only `SQLQueryAutoFixDB.Update.sql`. It preserves existing rows and can be executed repeatedly.
+- The creation script refuses to initialize a database that already contains application tables. Neither script drops an existing database or table.
+
+Run the scripts in SQL Server Management Studio, or use `sqlcmd -S .\SQLEXPRESS -E -C -b -i SQLQueryAutoFixDB.sql` followed by `sqlcmd -S .\SQLEXPRESS -E -C -b -i SQLQueryAutoFixDB.Update.sql` for a new installation.
+
+Run `dotnet run --project asp_net_3-2` and open `/swagger` at the development URL printed by the application.
 
 ## Architecture
 
