@@ -1,9 +1,12 @@
+using Microsoft.AspNetCore.Authorization;
+using asp_net_3_2.Security;
 using asp_net_3_2.DTOs.Reservations;
 using asp_net_3_2.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace asp_net_3_2.Controllers;
 
+[Authorize(Policy = Policies.Admin)]
 [Route("api/reservations")]
 public sealed class ReservationsController(IReservationService service)
     : CrudController<ReservationDto, CreateReservationDto, UpdateReservationDto, PatchReservationDto>(service)

@@ -1,3 +1,4 @@
+using asp_net_3_2.Security;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using asp_net_3_2.Controllers;
@@ -26,7 +27,8 @@ builder.Services.AddDbContext<AutoFixDbContext>(options =>
 builder.Services.AddScoped<IRepository<Role>, RoleRepository>();
 builder.Services.AddScoped<IService<RoleDto, RoleWriteDto, RoleWriteDto, PatchRoleDto>, Service<Role, RoleDto, RoleWriteDto, RoleWriteDto, PatchRoleDto>>();
 builder.Services.AddScoped<IRepository<User>, UserRepository>();
-builder.Services.AddScoped<IService<UserDto, UserWriteDto, UserWriteDto, PatchUserDto>, UserService>();
+builder.Services.AddScoped<IAccountRepository, UserRepository>();
+builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IRepository<Category>, CategoryRepository>();
 builder.Services.AddScoped<IService<CategoryDto, CategoryWriteDto, CategoryWriteDto, PatchCategoryDto>, Service<Category, CategoryDto, CategoryWriteDto, CategoryWriteDto, PatchCategoryDto>>();
 builder.Services.AddScoped<IRepository<Product>, ProductRepository>();
@@ -42,7 +44,7 @@ builder.Services.AddScoped<IService<OrderDto, CreateOrderDto, UpdateOrderDto, Pa
 builder.Services.AddScoped<IRepository<Reservation>, ReservationRepository>();
 builder.Services.AddScoped<IReservationService, ReservationService>();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddApiSecurity(builder.Configuration, builder.Environment);
 
 var app = builder.Build();
 
@@ -54,7 +56,15 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
+
+app.UseRouting();
+app.UseCors("frontend");
+app.UseRateLimiter();
+app.UseAuthentication();
 
 app.UseAuthorization();
 

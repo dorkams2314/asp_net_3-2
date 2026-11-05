@@ -38,13 +38,6 @@ public sealed class MappingProfile : Profile
         CreateMap<RoleWriteDto, Role>(MemberList.Source);
         CreateMap<PatchRoleDto, Role>(MemberList.Source)
             .ForMember(entity => entity.Name, options => options.PreCondition(dto => dto.Name != null));
-        CreateMap<UserWriteDto, User>(MemberList.Source);
-        CreateMap<PatchUserDto, User>(MemberList.Source)
-            .ForMember(entity => entity.Login, options => options.PreCondition(dto => dto.Login != null))
-            .ForMember(entity => entity.UserName, options => options.PreCondition(dto => dto.UserName != null))
-            .ForMember(entity => entity.PasswordHash, options => options.PreCondition(dto => dto.PasswordHash != null))
-            .ForMember(entity => entity.IsActive, options => options.PreCondition(dto => dto.IsActive != null))
-            .ForMember(entity => entity.RoleId, options => options.PreCondition(dto => dto.RoleId != null));
         CreateMap<CategoryWriteDto, Category>(MemberList.Source);
         CreateMap<PatchCategoryDto, Category>(MemberList.Source)
             .ForMember(entity => entity.Name, options => options.PreCondition(dto => dto.Name != null));

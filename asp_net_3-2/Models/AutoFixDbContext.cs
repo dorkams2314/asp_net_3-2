@@ -115,6 +115,7 @@ public partial class AutoFixDbContext : DbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__Roles__3214EC07F9DF2FE1");
 
+            entity.HasIndex(e => e.Name).IsUnique();
             entity.Property(e => e.Name).HasMaxLength(50);
         });
 
@@ -123,6 +124,7 @@ public partial class AutoFixDbContext : DbContext
             entity.HasKey(e => e.Id).HasName("PK__Users__3214EC072BCED480");
 
             entity.Property(e => e.IsActive).HasDefaultValue(true);
+            entity.HasIndex(e => e.Login).IsUnique();
             entity.Property(e => e.Login).HasMaxLength(100);
             entity.Property(e => e.PasswordHash).HasMaxLength(256);
             entity.Property(e => e.UserName).HasMaxLength(100);

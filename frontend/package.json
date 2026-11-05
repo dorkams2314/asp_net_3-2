@@ -1,0 +1,19 @@
+{
+  "name": "autofix-client",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host localhost --port 5173 --strictPort",
+    "dev:blocked": "vite --host localhost --port 5174 --strictPort",
+    "build": "vite build",
+    "preview": "vite preview --host localhost --port 5173 --strictPort"
+  },
+  "dependencies": {
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  },
+  "devDependencies": {
+    "vite": "^7.2.0"
+  }
+}

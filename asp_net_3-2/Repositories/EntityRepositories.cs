@@ -8,8 +8,17 @@ public sealed class RoleRepository(AutoFixDbContext context) : Repository<Role>(
     protected override IQueryable<Role> ReadQuery => Context.Roles.Include(role => role.Users);
 }
 
-public sealed class UserRepository(AutoFixDbContext context) : Repository<User>(context)
+public sealed class UserRepository(AutoFixDbContext context) : Repository<User>(context), IAccountRepository
 {
+    public Task<User?> FindByLoginAsync(string login, CancellationToken cancellationToken) =>
+        Context.Users.Include(user => user.Role).SingleOrDefaultAsync(user => user.Login == login, cancellationToken);
+
+    public Task<User?> FindAccountAsync(int id, CancellationToken cancellationToken) =>
+        Context.Users.Include(user => user.Role).SingleOrDefaultAsync(user => user.Id == id, cancellationToken);
+
+    public Task<Role> GetUserRoleAsync(CancellationToken cancellationToken) =>
+        Context.Roles.SingleAsync(role => role.Name == "User", cancellationToken);
+
     protected override IQueryable<User> ReadQuery => Context.Users
         .Include(user => user.Role).Include(user => user.Carts).Include(user => user.Orders);
 }

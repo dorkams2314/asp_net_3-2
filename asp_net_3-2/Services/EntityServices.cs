@@ -10,13 +10,6 @@ using AutoMapper;
 
 namespace asp_net_3_2.Services;
 
-public sealed class UserService(IRepository<User> repository, IRepository<Role> roles, IMapper mapper)
-    : Service<User, UserDto, UserWriteDto, UserWriteDto, PatchUserDto>(repository, mapper)
-{
-    protected override Task ValidateAsync(User entity, CancellationToken cancellationToken) =>
-        RequireExistsAsync(roles, entity.RoleId, cancellationToken);
-}
-
 public sealed class ProductService(IRepository<Product> repository, IRepository<Category> categories, IMapper mapper)
     : Service<Product, ProductDto, ProductWriteDto, ProductWriteDto, PatchProductDto>(repository, mapper)
 {
